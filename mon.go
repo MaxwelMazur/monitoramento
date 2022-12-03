@@ -2,52 +2,87 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"os"
+	"math"
 )
 
-var sites = []string{
-	"https://venturasinformatica.com.br/",
-	"https://www.gov.br/pt-br",
-	"https://www.playlostark.com/",
-	"https://grupointegrado.instructure.com/",
-	"http://www.github.com/",
-	"http://www.alura.com.br/",
-	"https://downdetector.com.br/",
-	"https://grupointegrado.br/",
-	"https://medarcade.grupointegrado.br/",
-	"https://www.professorburnes.com.br/",
-	"https://vizer.tv/",
-	"https://naoexite.nois/",
-	"http://www.orkut.com/",
-	"https://discord.com/login",
-	"https://projectcheats.com/ui/#",
-	"https://www.facebook.com/",
-	"https://www.mercadolivre.com.br/",
-	"https://outlook.live.com/owa/",
-	"https://www.kabum.com.br/",
+type link struct {
+	Link string `json:"link"`
 }
 
-func main() {
-	for {
-		menu()
-		var arg string
-		fmt.Scan(&arg)
+//func main() {
+//	menu := tui.NewMenu(tui.DefaultStyle())
+//	menu.Title = "Test"
+//	menu.Description = "Test app"
+//
+//	menu.Commands = []tui.Command{
+//		tui.Command{
+//			Title:       "No Args",
+//			Cli:         "echo hello!",
+//			Description: "just being polite",
+//			Success:     "Yey it works",
+//			PrintOut:    true,
+//		},
+//	}
+//
+//	menu.Show()
+//	go menu.EventManager()
+//	<-menu.Wait
+//	menu.Quit()
+//}
 
-		switch arg {
-		case "1":
-			adicionarSite()
-		case "2":
-			verificaSites()
-		default:
-			os.Exit(0)
-		}
-	}
+func main() {
+
+	a()
+
+	//checkErr := func(err error) {
+	//	if err != nil {
+	//		Info("Err: ", err.Error())
+	//		return
+	//	}
+	//}
+	//
+	//file, err := os.ReadFile("./links.json")
+	//checkErr(err)
+	//
+	//var l []link
+	//err = json.Unmarshal(file, &l)
+	//checkErr(err)
+	//
+	//newItem := link{
+	//	Link: "http://sitenotexist.bf",
+	//}
+	//
+	//l = append(l, newItem)
+	//
+	//for _, v := range l {
+	//	Info(v.Link)
+	//}
+	//
+	//newByte, err := json.MarshalIndent(l, " ", "	")
+	//checkErr(err)
+	//
+	//err = os.WriteFile("./links.json", newByte, os.ModePerm)
+	//checkErr(err)
+
+	//for {
+	//	menu()
+	//	var arg string
+	//	fmt.Scan(&arg)
+	//
+	//	switch arg {
+	//	case "1":
+	//		adicionarSite()
+	//	case "2":
+	//		verificaSites()
+	//	default:
+	//		os.Exit(0)
+	//	}
+	//}
 }
 
 func adicionarSite() {
-	fmt.Println("adicionar site")
-	sites = append(sites, "https://www.github.com/MaxwelMazur")
+	//fmt.Println("adicionar site")
+	//sites = append(sites, "https://www.github.com/MaxwelMazur")
 }
 
 func menu() {
@@ -60,14 +95,14 @@ func menu() {
 }
 
 func verificaSites() {
-	for _, v := range sites {
-		resp, err := http.Get(v)
-		if err != nil {
-			fmt.Println("Resposta: Este site não teve resposta")
-			continue
-		}
-		fmt.Println("Resposta: ", v, " - ", resp.Status)
-	}
+	//for _, v := range sites {
+	//	resp, err := http.Get(v)
+	//	if err != nil {
+	//		fmt.Println("Resposta: Este site não teve resposta")
+	//		continue
+	//	}
+	//	fmt.Println("Resposta: ", v, " - ", resp.Status)
+	//}
 }
 
 func Info(format string, args ...interface{}) {
@@ -76,4 +111,52 @@ func Info(format string, args ...interface{}) {
 
 func Warning(format string, args ...interface{}) {
 	fmt.Printf("\x1b[36;1m%s\x1b[0m\n", fmt.Sprintf(format, args...))
+}
+
+type geo interface {
+	area() float64
+}
+
+type retangulo struct {
+	largura, altura float64
+}
+
+type circulo struct {
+	raio float64
+}
+
+func (r retangulo) area() float64 {
+	return r.largura * r.altura
+}
+
+type B struct{}
+
+func (b B) area() float64 {
+	return 0
+}
+
+//	func (r rect) perim() float64 {
+//		return 2*r.width + 2*r.height
+//	}
+
+func (c circulo) area() float64 {
+	return math.Pi * c.raio * c.raio
+}
+
+//func (c circle) perim() float64 {
+//	return 2 * math.Pi * c.radius
+//}
+
+func measure(g geo) {
+	fmt.Println(g)
+	fmt.Println(g.area())
+}
+
+func a() {
+	r := retangulo{34.1, 12.2}
+	c := circulo{raio: 11.1}
+
+	measure(r)
+	measure(c)
+	measure(B{})
 }
